@@ -6,7 +6,7 @@ class Home extends React.Component{
         return(
             <div>
                 <h1>Hello this is my home page</h1>
-                <Board/>
+                <Board width={8} height={8}/>
             </div>
         )
     }
