@@ -41,6 +41,10 @@ export default class Piece{
         this.color=color;
         this.img=fileTree[color][type];
     }
+    move(x,y){
+        this.x=x;
+        this.y=y;
+    }
 }
 
 
