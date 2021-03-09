@@ -13,24 +13,35 @@ export class Board extends React.Component{
     }
 
 
-    handleClick=(x,y)=>{
-        var temp=this.state.board;
-        if( this.state.selected && this.state.selected.x==x && this.state.selected.y==y){
-            temp[this.state.selected.y][this.state.selected.x].isSelected=false;
-            this.setState({
-                board:temp,
-                selected:null
-            })
-        } else{
-            if(this.state.selected){
-                temp[this.state.selected.y][this.state.selected.x].isSelected=false;
+    handleClick=(piece,x,y)=>{
+        if(piece && this.state.selected && this.state.selected.piece && this.state.selected.piece.color!=piece.color){
+            this.move(this.state.selected.piece,x,y);
+            
+        }else{
+            if (piece){
+                var temp=this.state.board;
+                if( this.state.selected && this.state.selected.x==x && this.state.selected.y==y) {
+                    temp[this.state.selected.y][this.state.selected.x].isSelected=false;
+                    this.setState({
+                        board:temp,
+                        selected:null
+                    })
+                } else{
+                    if(this.state.selected){
+                        temp[this.state.selected.y][this.state.selected.x].isSelected=false;
+                    }
+                    temp[y][x].isSelected=true;
+                    this.setState({
+                        board:temp,
+                        selected:temp[y][x]
+                    })
+                }
+            } else{
+                if(this.state.selected){
+                    this.move(this.state.selected.piece,x,y)
+                }
             }
-            temp[y][x].isSelected=true;
-            this.setState({
-                board:temp,
-                selected:temp[y][x]
-            })
-        }
+        }   
     }
     
 
@@ -40,7 +51,9 @@ export class Board extends React.Component{
             var row=[];
             for (var x=0;x<w;x++){
                 row.push(<Square 
-                    handleClick={(x,y)=>this.handleClick(x,y)} 
+                    x={x}
+                    y={y}
+                    handleClick={(piece,x,y)=>this.handleClick(piece,x,y)} 
                     key = {Math.random()} 
                     color={(x+y)%2===0?this.props.color1:this.props.color2} 
                     piece={this.state.board[y][x].piece} 
@@ -73,8 +86,10 @@ export class Board extends React.Component{
         if(p){
             var temp=this.state.board;
             temp[p.y][p.x].piece=null;
+            temp[p.y][p.x].isSelected=false;
             p.move(x,y);
             temp[p.y][p.x].piece=p;
+            
             this.setState({
                 board:temp
             })
@@ -90,14 +105,13 @@ export class Board extends React.Component{
         this.setState({
             board:board
         })
-        console.log(board)
+        console.log(board);
     }
 
     render(){
         var boardRender=this.createBoard(this.props.width,this.props.height);
         return(
             <div style={{width:this.props.size.x, height:this.props.size.y}}>
-                <button onClick={()=>this.move(this.state.board[0][0].piece,2,2)}>ada</button>
                 {boardRender.map((r)=><Row key={Math.random()} squares={r}/>)}
             </div>
         )

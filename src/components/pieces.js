@@ -87,5 +87,5 @@ export const StartingPieces = [
     new Piece(4,6,"pawn","black"),
     new Piece(5,6,"pawn","black"),
     new Piece(6,6,"pawn","black"),
-    new Piece(7,6,"pawn","white"),
+    new Piece(7,6,"pawn","black"),
 ]

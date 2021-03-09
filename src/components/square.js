@@ -19,15 +19,13 @@ export class Square extends React.Component {
                 display:"flex",alignItems:"center",
                 justifyContent:"space-around",
                 borderStyle: isSelected?"solid":"none",
-                borderWidth:"4px"
+                borderWidth:"4px",
                 }}
             onClick={()=>{
-                if(this.props.piece){
-                    this.props.handleClick(this.props.piece.x,this.props.piece.y);
-                }
+                    this.props.handleClick(this.props.piece,this.props.x,this.props.y);
             }}
             >
-                {this.props.piece && <img width={"80%"} height={"80%"} alt="" src={this.props.piece.img}/>}
+                {this.props.piece && <img draggable={false} width={"80%"} height={"80%"} alt="" src={this.props.piece.img}/>}
             </div>
         )
     }
