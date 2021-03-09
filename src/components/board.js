@@ -1,14 +1,15 @@
 import React from "react";
 
 import {Square, Row} from "./square"
-import Piece, {StartingPieces} from "./pieces"
+import Piece, {StartingPieces, isLegalMove} from "./pieces"
 
 export class Board extends React.Component{
     constructor(props){
         super(props);
         this.state={
             board:this.createPieceArray(this.props.width,this.props.height),
-            selected:null
+            selected:null,
+            turn:"white"
         }
     }
 
@@ -16,7 +17,6 @@ export class Board extends React.Component{
     handleClick=(piece,x,y)=>{
         if(piece && this.state.selected && this.state.selected.piece && this.state.selected.piece.color!=piece.color){
             this.move(this.state.selected.piece,x,y);
-            
         }else{
             if (piece){
                 var temp=this.state.board;
@@ -43,7 +43,7 @@ export class Board extends React.Component{
             }
         }   
     }
-    
+
 
     createBoard = (w,h)=>{ 
         var board=[]
@@ -85,14 +85,16 @@ export class Board extends React.Component{
     move = (p,x,y) =>{
         if(p){
             var temp=this.state.board;
-            temp[p.y][p.x].piece=null;
-            temp[p.y][p.x].isSelected=false;
-            p.move(x,y);
-            temp[p.y][p.x].piece=p;
-            
-            this.setState({
-                board:temp
-            })
+            if(isLegalMove(p,x,y,temp,this.props.width,this.props.height,this.state.turn)){
+                temp[p.y][p.x].piece=null;
+                temp[p.y][p.x].isSelected=false;
+                p.move(x,y);
+                temp[p.y][p.x].piece=p;
+                this.setState({
+                    board:temp,
+                    turn:this.state.turn=="white"?"black":"white"
+                })
+            }
         }
     }
 
