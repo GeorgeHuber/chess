@@ -9,7 +9,7 @@ class Home extends React.Component{
             t:0
         }
         this.timer=null;
-        this.myBoard=<Board size={{x:"600",y:"600"}} width={8} height={8} color1={"white"} color2={"grey"}/>
+        this.myBoard=<Board size={{x:"1000",y:"1000"}} width={8} height={8} color1={"white"} color2={"grey"}/>
     }
 
     componentDidMount(){
