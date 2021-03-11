@@ -11,7 +11,8 @@ export class Board extends React.Component{
             selected:null,
             turn:"white",
             turnList:[],
-            choosePieceMenuOpen:[false,null]
+            choosePieceMenuOpen:[false,null],
+            size:this.props.size
         }
     }
 
@@ -59,8 +60,8 @@ export class Board extends React.Component{
                     key = {Math.random()} 
                     color={(x+y)%2===0?this.props.color1:this.props.color2} 
                     piece={this.state.board[y][x].piece} 
-                    height={this.props.size.y/h+"px"} 
-                    width={this.props.size.x/w+"px"} 
+                    height={this.state.size.y/h+"px"} 
+                    width={this.state.size.x/w+"px"} 
                     isSelected={this.state.board[y][x].isSelected}/>)
             }
             board.push(row)
@@ -324,6 +325,12 @@ export class Board extends React.Component{
         })
     }
 
+    updateSize =(x,y)=>{
+        this.setState({
+            size:{x:x,y:y}
+        })
+    }
+
     componentDidMount(){
         var board=this.state.board;
         
@@ -339,7 +346,7 @@ export class Board extends React.Component{
     render(){
         var boardRender=this.createBoard(this.props.width,this.props.height);
         return(
-            <div style={{width:this.props.size.x, height:this.props.size.y,position:"relative"}}>
+            <div style={{width:this.state.size.x, height:this.state.size.y,position:"relative"}}>
                 {boardRender.map((r)=><Row key={Math.random()} squares={r}/>)}
                 {this.state.choosePieceMenuOpen[0]&&<div style={{width:"40%", height:"40%",backgroundColor:"rgba(255,255,255,0.8)",position:"absolute",top:"30%",right:"30%",display:"flex",justifyContent:"space-around",flexDirection:"column",alignItems:"center"}}>
                     {["queen","rook","bishop","knight"].map((p)=>{

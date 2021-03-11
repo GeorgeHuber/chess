@@ -6,10 +6,20 @@ class Home extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            t:0
+            t:0,
+            x:Math.round(window.innerWidth/2).toString(),
         }
         this.timer=null;
-        this.myBoard=<Board size={{x:"600",y:"600"}} width={8} height={8} color1={"white"} color2={"transparent"}/>
+        this.child = React.createRef();
+        this.myBoard=<Board ref={this.child} size={{x:this.state.x,y:this.state.x}} width={8} height={8} color1={"white"} color2={"transparent"}/>
+    }
+
+    updateSize=()=>{
+        var x=Math.round(window.innerWidth/2).toString();
+        this.setState({
+            x:x
+        });
+        this.child.current.updateSize(x,x)
     }
 
     componentDidMount(){
@@ -18,9 +28,11 @@ class Home extends React.Component{
                 t:this.state.t+1
             })
         },51)
+        window.addEventListener('resize', this.updateSize);
     }
 
     componentWillUnmount(){
+        window.removeEventListener('resize', this.updateSize);
         return this.timer;
     }
 
