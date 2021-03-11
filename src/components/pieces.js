@@ -45,6 +45,10 @@ export default class Piece{
         this.x=x;
         this.y=y;
     }
+    updatePiece(type){
+        this.type=type
+        this.img=fileTree[this.color][this.type];
+    }
 }
 
 

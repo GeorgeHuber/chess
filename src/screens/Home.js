@@ -9,7 +9,7 @@ class Home extends React.Component{
             t:0
         }
         this.timer=null;
-        this.myBoard=<Board size={{x:"600",y:"600"}} width={8} height={8} color1={"white"} color2={"grey"}/>
+        this.myBoard=<Board size={{x:"600",y:"600"}} width={8} height={8} color1={"white"} color2={"transparent"}/>
     }
 
     componentDidMount(){
@@ -25,15 +25,15 @@ class Home extends React.Component{
     }
 
     r(t){
-        var res=Math.sin(t/255)*100;
+        var res=Math.sin(t/255)*100+50;
         return Math.round(res)%255
     }
     g(t){
-        var res=Math.sin(t*4/255)*100;
+        var res=Math.sin(t*4/255)*100+50;
         return Math.round(res)%255
     }
     b(t){
-        var res=Math.sin(t*6/255)*100;
+        var res=Math.sin(t*6/255)*100+50;
         return Math.round(res)%255
     }
 

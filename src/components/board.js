@@ -10,7 +10,8 @@ export class Board extends React.Component{
             board:this.createPieceArray(this.props.width,this.props.height),
             selected:null,
             turn:"white",
-            turnList:[]
+            turnList:[],
+            choosePieceMenuOpen:[false,null]
         }
     }
 
@@ -286,8 +287,6 @@ export class Board extends React.Component{
         if(p){
             var temp=this.state.board;
             if(this.isLegalMove(p,x,y,temp,this.props.width,this.props.height,this.state.turn, this.state.turnList)){
-
-
                 var tempTurns=this.state.turnList;
                 tempTurns.push({
                     x:p.x,
@@ -300,6 +299,9 @@ export class Board extends React.Component{
                 temp[p.y][p.x].piece=null;
                 temp[p.y][p.x].isSelected=false;
                 p.move(x,y);
+                if(p.type=="pawn" && p.y==(p.color=="white"?7:0)){
+                    this.pieceChange(p);
+                }
                 temp[p.y][p.x].piece=p;
                 this.setState({
                     board:temp,
@@ -307,6 +309,19 @@ export class Board extends React.Component{
                 })
             }
         }
+    }
+
+    pieceChange =(p) =>{
+        this.setState({
+            choosePieceMenuOpen:[true,p]
+        })
+    }
+    pieceSelect=(type)=>{
+        var p = this.state.choosePieceMenuOpen[1];
+        p.updatePiece(type);
+        this.setState({
+            choosePieceMenuOpen:[false,null]
+        })
     }
 
     componentDidMount(){
@@ -324,8 +339,15 @@ export class Board extends React.Component{
     render(){
         var boardRender=this.createBoard(this.props.width,this.props.height);
         return(
-            <div style={{width:this.props.size.x, height:this.props.size.y}}>
+            <div style={{width:this.props.size.x, height:this.props.size.y,position:"relative"}}>
                 {boardRender.map((r)=><Row key={Math.random()} squares={r}/>)}
+                {this.state.choosePieceMenuOpen[0]&&<div style={{width:"40%", height:"40%",backgroundColor:"rgba(255,255,255,0.8)",position:"absolute",top:"30%",right:"30%",display:"flex",justifyContent:"space-around",flexDirection:"column",alignItems:"center"}}>
+                    {["queen","rook","bishop","knight"].map((p)=>{
+                        return(
+                            <button style={{width:"80%",height:"20%",backgroundColor:"white",border:"solid 2px black",cursor:"pointer"}} onClick={()=>{this.pieceSelect(p)}}>{p}</button>
+                        )
+                    })}
+                    </div>}
             </div>
         )
     }
