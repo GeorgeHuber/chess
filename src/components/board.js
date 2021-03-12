@@ -12,7 +12,8 @@ export class Board extends React.Component{
             turn:"white",
             turnList:[],
             choosePieceMenuOpen:[false,null],
-            size:this.props.size
+            size:this.props.size,
+            winner:null
         }
     }
 
@@ -143,6 +144,7 @@ export class Board extends React.Component{
         }
     
         if(p.type=="king"){
+            //TODO: check other king
             if(Math.abs(p.x-x)>1 || Math.abs(p.y-y)>1){
                 return false
             }
@@ -282,7 +284,28 @@ export class Board extends React.Component{
         return true;
     }
 
-
+    inCheck = (color) => {
+        var king;
+        var board=this.state.board;
+        for (var y=0;y<board.length;y++){
+            for (var x=0;x<board[0].length;x++){
+                var p=board[y][x].piece
+                    if(p && p.type=="king" && p.color==color){
+                        king=p;
+                    }
+            }
+        }
+        //attacks
+        for (var y=0;y<board.length;y++){
+            for (var x=0;x<board[0].length;x++){
+                var p=board[y][x].piece
+                    if(this.isLegalMove(p,king.x,king.y)){
+                        return true
+                    }
+            }
+        }
+        return false
+    }
 
     move = (p,x,y) =>{
         if(p){
