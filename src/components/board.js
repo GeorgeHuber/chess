@@ -285,7 +285,7 @@ export class Board extends React.Component{
     }
 
     inCheck = (color) => {
-        var king;
+        var king =null;
         var board=this.state.board;
         for (var y=0;y<board.length;y++){
             for (var x=0;x<board[0].length;x++){
@@ -299,11 +299,16 @@ export class Board extends React.Component{
         for (var y=0;y<board.length;y++){
             for (var x=0;x<board[0].length;x++){
                 var p=board[y][x].piece
-                    if(this.isLegalMove(p,king.x,king.y)){
-                        return true
+                if(p && p.color!=color){
+                    if(this.isLegalMove(p,king.x,king.y,this.state.board,this.props.width,this.props.height, this.state.turn=="white"?"black":"white", this.state.turnList)){
+                        alert("check")
+                        return true;
+                        
                     }
+                }
             }
         }
+        //alert(king.x+" "+king.y+" ran")
         return false
     }
 
@@ -327,9 +332,14 @@ export class Board extends React.Component{
                     this.pieceChange(p);
                 }
                 temp[p.y][p.x].piece=p;
+                var win = null;
+                if(this.inCheck(this.state.turn)){
+                    win = this.state.turn=="white"?"black":"white"
+                }
                 this.setState({
                     board:temp,
-                    turn:this.state.turn=="white"?"black":"white"
+                    turn:this.state.turn=="white"?"black":"white",
+                    winner:win
                 })
             }
         }
@@ -358,13 +368,31 @@ export class Board extends React.Component{
         var board=this.state.board;
         
         for (var i=0;i<StartingPieces.length;i++){
-            this.renderPiece(StartingPieces[i],board);
+            this.renderPiece(StartingPieces[i].copy(),board);
         }
         this.setState({
             board:board
         })
         console.log(board);
     }
+
+    resetGame = () => {
+        var board=this.createPieceArray(this.props.width,this.props.height);
+        
+        for (var i=0;i<StartingPieces.length;i++){
+            this.renderPiece(StartingPieces[i].copy(),board);
+        }
+        this.setState({
+            board:board,
+            selected:null,
+            turn:"white",
+            turnList:[],
+            choosePieceMenuOpen:[false,null],
+            size:this.props.size,
+            winner:null
+        })
+    }
+
 
     render(){
         var boardRender=this.createBoard(this.props.width,this.props.height);
@@ -377,6 +405,10 @@ export class Board extends React.Component{
                             <button style={{width:"80%",height:"20%",backgroundColor:"white",border:"solid 2px black",cursor:"pointer"}} onClick={()=>{this.pieceSelect(p)}}>{p}</button>
                         )
                     })}
+                    </div>}
+                    {this.state.winner&&<div style={{width:"60%", height:"50%",backgroundColor:"rgba(255,255,255,1)",position:"absolute",top:"25%",right:"25%",display:"flex",justifyContent:"space-around",flexDirection:"column",alignItems:"center"}}>
+                    <h1>{this.state.winner.toUpperCase()} wins</h1>
+                    <div style={{width:"80%",height:"20%",display:"flex",flexDirection:"column",alignItems:"center",backgroundColor:"white",border:"solid 2px black",cursor:"pointer"}} onClick={()=>{this.resetGame()}}><h3>reset game</h3></div>
                     </div>}
             </div>
         )

@@ -49,6 +49,9 @@ export default class Piece{
         this.type=type
         this.img=fileTree[this.color][this.type];
     }
+    copy(){
+        return new Piece(this.x,this.y, this.type,this.color)
+    }
 }
 
 
