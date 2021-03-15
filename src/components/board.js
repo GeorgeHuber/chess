@@ -301,7 +301,6 @@ export class Board extends React.Component{
                 var p=board[y][x].piece
                 if(p && p.color!=color){
                     if(this.isLegalMove(p,king.x,king.y,this.state.board,this.props.width,this.props.height, this.state.turn=="white"?"black":"white", this.state.turnList)){
-                        alert("check")
                         return true;
                         
                     }
@@ -402,13 +401,14 @@ export class Board extends React.Component{
                 {this.state.choosePieceMenuOpen[0]&&<div style={{width:"40%", height:"40%",backgroundColor:"rgba(255,255,255,0.8)",position:"absolute",top:"30%",right:"30%",display:"flex",justifyContent:"space-around",flexDirection:"column",alignItems:"center"}}>
                     {["queen","rook","bishop","knight"].map((p)=>{
                         return(
-                            <button style={{width:"80%",height:"20%",backgroundColor:"white",border:"solid 2px black",cursor:"pointer"}} onClick={()=>{this.pieceSelect(p)}}>{p}</button>
+                            <div style={{width:"80%",height:"20%",backgroundColor:"white",border:"solid 2px black",cursor:"pointer",display:"flex",justifyContent:"space-around"}} onClick={()=>{this.pieceSelect(p)}}>
+                                <a>{p}</a></div>
                         )
                     })}
                     </div>}
                     {this.state.winner&&<div style={{width:"60%", height:"50%",backgroundColor:"rgba(255,255,255,1)",position:"absolute",top:"25%",right:"25%",display:"flex",justifyContent:"space-around",flexDirection:"column",alignItems:"center"}}>
-                    <h1>{this.state.winner.toUpperCase()} wins</h1>
-                    <div style={{width:"80%",height:"20%",display:"flex",flexDirection:"column",alignItems:"center",backgroundColor:"white",border:"solid 2px black",cursor:"pointer"}} onClick={()=>{this.resetGame()}}><h3>reset game</h3></div>
+                    <a>{this.state.winner.toUpperCase()} wins</a>
+                    <div style={{width:"80%",height:"20%",display:"flex",flexDirection:"column",alignItems:"center",backgroundColor:"white",border:"solid 2px black",cursor:"pointer"}} onClick={()=>{this.resetGame()}}><a>reset game</a></div>
                     </div>}
             </div>
         )
